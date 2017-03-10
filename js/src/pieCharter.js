@@ -8,6 +8,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 	startAngle:-90,
 	endAngle:90,
 	tooltipTemplate:Reuters.Graphics.pieCharter.Template.pietooltip,
+	setupTemplate:Reuters.Graphics.pieCharter.Template.piesetup,
 				
 	initialize: function(opts){
 		var self = this;
@@ -106,18 +107,25 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		var self = this;
 		self.trigger("baseRender:start");
 
+		if(self.multiArcs){
+			self.margin.bottom = 40;			
+		}
+
+
 		//make a label based on the div's ID to use as unique identifiers 
 		self.targetDiv = self.$el.attr("id");
-
+		self.$el.html( self.setupTemplate({self:self}) )
+		self.$chartEl = $("#"+self.targetDiv+"-chart")
+		self.chartDiv = self.$el.attr("id")+"-chart";
 						
 		//set the width and the height to be the width and height of the div the chart is rendered in
-		self.width = self.$el.width() - self.margin.left - self.margin.right;
+		self.width = self.$chartEl.width() - self.margin.left - self.margin.right;
 		//if no height set, square, otherwise use the set height, if lower than 10, it is a ratio to width
 		if (!self.options.height){
-			self.height = self.$el.width() - self.margin.top - self.margin.bottom;			
+			self.height = self.$chartEl.width() - self.margin.top - self.margin.bottom;			
 		}
 		if (self.options.height < 10){
-			self.height = (self.$el.width() * self.options.height) - self.margin.top - self.margin.bottom;	
+			self.height = (self.$chartEl.width() * self.options.height) - self.margin.top - self.margin.bottom;	
 			self.svgHeight = self.height;			
 		}
 		
@@ -145,7 +153,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 
  
 		//create an SVG
-		self.svg = d3.select("#"+self.targetDiv).append("svg")
+		self.svg = d3.select("#"+self.chartDiv).append("svg")
 			.attr({
 				width: self.width + self.margin.left + self.margin.right,
 				height:self.svgHeight + self. margin.top + self.margin.bottom
@@ -210,7 +218,25 @@ Reuters.Graphics.donut = Backbone.View.extend({
 
 
 		$(".arc path").tooltip({html:true,  placement:"bottom"})
+
+		if(self.multiArcs){
+			self.svg.selectAll(".arcLabels")
+				.data(self.multiSort)
+				.enter()
+				.append("text")
+				.attr("y", 20)
+				.attr("x",function(d,i){
+					var divisions = self.multiSort.length;
+					var index = Math.abs(i - divisions + 1)
+					console.log(index)
+					var radiusChunk = self.radius / divisions
+					return self.donutHoleSize + (radiusChunk * index);
+				})
+				.text(function(d){return d})
+						
+		}
 		
+
 		$(window).on("resize", _.debounce(function(event) {
 			self.update();
 		},100));
@@ -227,13 +253,13 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		var self = this;
 
 		//set the width and the height to be the width and height of the div the chart is rendered in
-		self.width = self.$el.width() - self.margin.left - self.margin.right;
+		self.width = self.$chartEl.width() - self.margin.left - self.margin.right;
 		//if no height set, square, otherwise use the set height, if lower than 10, it is a ratio to width
 		if (!self.options.height){
-			self.height = self.$el.width() - self.margin.top - self.margin.bottom;			
+			self.height = self.$chartEl.width() - self.margin.top - self.margin.bottom;			
 		}
 		if (self.options.height < 10){
-			self.height = (self.$el.width() * self.options.height) - self.margin.top - self.margin.bottom;	
+			self.height = (self.$chartEl.width() * self.options.height) - self.margin.top - self.margin.bottom;	
 			self.svgHeight = self.height;			
 		}
 		
@@ -261,7 +287,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 
  
  		//create an SVG
-		d3.select("#"+self.targetDiv+" svg")
+		d3.select("#"+self.chartDiv+" svg")
 			.transition()
 			.attr({
 				width: self.width + self.margin.left + self.margin.right,

@@ -4,6 +4,33 @@
   window["Reuters"]["Graphics"]["pieCharter"] = window["Reuters"]["Graphics"]["pieCharter"] || {};
   window["Reuters"]["Graphics"]["pieCharter"]["Template"] = window["Reuters"]["Graphics"]["pieCharter"]["Template"] || {};
 
+  window["Reuters"]["Graphics"]["pieCharter"]["Template"]["piesetup"] = function (t) {
+    var __t,
+        __p = '',
+        __j = Array.prototype.join;
+    function print() {
+      __p += __j.call(arguments, '');
+    }
+
+    if (t.self.hasLegend) {
+      ;
+      __p += '\n	<div class="pie-legend d-flex flex-row flex-wrap">\n		';
+      t.self.colorDomain.forEach(function (d, i) {
+        ;
+        __p += '\n			<div class="legend-item d-flex flex-row mr-1">\n				<div class="pie-legend-box" style="background-color:' + ((__t = t.self.colorRange[i]) == null ? '' : __t) + ';"></div>\n				<div class="pie-legend-text">' + ((__t = d) == null ? '' : __t) + '</div>\n			</div>\n		';
+      });
+      __p += '\n	</div>\n';
+    };
+    __p += '\n<div id="' + ((__t = t.self.targetDiv + '-chart') == null ? '' : __t) + '"></div>';
+    return __p;
+  };
+})();
+(function () {
+  window["Reuters"] = window["Reuters"] || {};
+  window["Reuters"]["Graphics"] = window["Reuters"]["Graphics"] || {};
+  window["Reuters"]["Graphics"]["pieCharter"] = window["Reuters"]["Graphics"]["pieCharter"] || {};
+  window["Reuters"]["Graphics"]["pieCharter"]["Template"] = window["Reuters"]["Graphics"]["pieCharter"]["Template"] || {};
+
   window["Reuters"]["Graphics"]["pieCharter"]["Template"]["pietooltip"] = function (t) {
     var __t,
         __p = '';
@@ -21,6 +48,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 	startAngle: -90,
 	endAngle: 90,
 	tooltipTemplate: Reuters.Graphics.pieCharter.Template.pietooltip,
+	setupTemplate: Reuters.Graphics.pieCharter.Template.piesetup,
 
 	initialize: function initialize(opts) {
 		var self = this;
@@ -114,17 +142,24 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		var self = this;
 		self.trigger("baseRender:start");
 
+		if (self.multiArcs) {
+			self.margin.bottom = 40;
+		}
+
 		//make a label based on the div's ID to use as unique identifiers 
 		self.targetDiv = self.$el.attr("id");
+		self.$el.html(self.setupTemplate({ self: self }));
+		self.$chartEl = $("#" + self.targetDiv + "-chart");
+		self.chartDiv = self.$el.attr("id") + "-chart";
 
 		//set the width and the height to be the width and height of the div the chart is rendered in
-		self.width = self.$el.width() - self.margin.left - self.margin.right;
+		self.width = self.$chartEl.width() - self.margin.left - self.margin.right;
 		//if no height set, square, otherwise use the set height, if lower than 10, it is a ratio to width
 		if (!self.options.height) {
-			self.height = self.$el.width() - self.margin.top - self.margin.bottom;
+			self.height = self.$chartEl.width() - self.margin.top - self.margin.bottom;
 		}
 		if (self.options.height < 10) {
-			self.height = self.$el.width() * self.options.height - self.margin.top - self.margin.bottom;
+			self.height = self.$chartEl.width() * self.options.height - self.margin.top - self.margin.bottom;
 			self.svgHeight = self.height;
 		}
 
@@ -151,7 +186,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		}
 
 		//create an SVG
-		self.svg = d3.select("#" + self.targetDiv).append("svg").attr({
+		self.svg = d3.select("#" + self.chartDiv).append("svg").attr({
 			width: self.width + self.margin.left + self.margin.right,
 			height: self.svgHeight + self.margin.top + self.margin.bottom
 		}).append("g").attr("transform", "translate(" + self.width / 2 + "," + self.heightTranslate + ")");
@@ -211,6 +246,18 @@ Reuters.Graphics.donut = Backbone.View.extend({
 
 		$(".arc path").tooltip({ html: true, placement: "bottom" });
 
+		if (self.multiArcs) {
+			self.svg.selectAll(".arcLabels").data(self.multiSort).enter().append("text").attr("y", 20).attr("x", function (d, i) {
+				var divisions = self.multiSort.length;
+				var index = Math.abs(i - divisions + 1);
+				console.log(index);
+				var radiusChunk = self.radius / divisions;
+				return self.donutHoleSize + radiusChunk * index;
+			}).text(function (d) {
+				return d;
+			});
+		}
+
 		$(window).on("resize", _.debounce(function (event) {
 			self.update();
 		}, 100));
@@ -224,13 +271,13 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		var self = this;
 
 		//set the width and the height to be the width and height of the div the chart is rendered in
-		self.width = self.$el.width() - self.margin.left - self.margin.right;
+		self.width = self.$chartEl.width() - self.margin.left - self.margin.right;
 		//if no height set, square, otherwise use the set height, if lower than 10, it is a ratio to width
 		if (!self.options.height) {
-			self.height = self.$el.width() - self.margin.top - self.margin.bottom;
+			self.height = self.$chartEl.width() - self.margin.top - self.margin.bottom;
 		}
 		if (self.options.height < 10) {
-			self.height = self.$el.width() * self.options.height - self.margin.top - self.margin.bottom;
+			self.height = self.$chartEl.width() * self.options.height - self.margin.top - self.margin.bottom;
 			self.svgHeight = self.height;
 		}
 
@@ -257,7 +304,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		}
 
 		//create an SVG
-		d3.select("#" + self.targetDiv + " svg").transition().attr({
+		d3.select("#" + self.chartDiv + " svg").transition().attr({
 			width: self.width + self.margin.left + self.margin.right,
 			height: self.svgHeight + self.margin.top + self.margin.bottom
 		});

@@ -8,3 +8,19 @@
 
 	}
 }
+.pie-legend{
+	margin-bottom:10px;
+	.legend-item{
+		margin-bottom: 5px;
+		.pie-legend-box{
+			width:10px;
+			height:10px;
+			margin-right:5px;
+			margin-top: 3px;
+		}
+		.pie-legend-text{
+			line-height: 1;
+			font-size:$font-size-sm;
+		}
+	}
+}
