@@ -1,5 +1,5 @@
 <%if (t.self.hasLegend){%>
-	<div class="pie-legend d-flex flex-row flex-wrap">
+	<div class="pie-legend d-flex flex-row flex-wrap justify-content-center">
 		<%t.self.colorDomain.forEach(function(d,i){%>
 			<div class="legend-item d-flex flex-row mr-1">
 				<div class="pie-legend-box" style="background-color:<%=t.self.colorRange[i]%>;"></div>

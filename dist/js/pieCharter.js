@@ -14,7 +14,7 @@
 
     if (t.self.hasLegend) {
       ;
-      __p += '\n	<div class="pie-legend d-flex flex-row flex-wrap">\n		';
+      __p += '\n	<div class="pie-legend d-flex flex-row flex-wrap justify-content-center">\n		';
       t.self.colorDomain.forEach(function (d, i) {
         ;
         __p += '\n			<div class="legend-item d-flex flex-row mr-1">\n				<div class="pie-legend-box" style="background-color:' + ((__t = t.self.colorRange[i]) == null ? '' : __t) + ';"></div>\n				<div class="pie-legend-text">' + ((__t = d) == null ? '' : __t) + '</div>\n			</div>\n		';
