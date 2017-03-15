@@ -172,6 +172,10 @@ Reuters.Graphics.donut = Backbone.View.extend({
 			self.svgHeight = self.height / 2;
 		}
 
+		if (self.wholePie) {
+			self.svgHeight = self.height;
+		}
+
 		if (!self.radius) {
 			self.radius = Math.min(self.width, self.height) / 2;
 		}
@@ -181,8 +185,9 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		if (self.options.donutHoleSize < 10 && self.options.donutHoleSize > 0) {
 			self.donutHoleSize = self.radius / self.donutHoleSize;
 		}
+
 		if (self.options.donutHoleSize === 0) {
-			self.donutHoleSize = self.radius;
+			self.donutHoleSize = 1;
 		}
 
 		//create an SVG
