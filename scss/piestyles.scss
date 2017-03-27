@@ -10,6 +10,11 @@
 }
 .pie-legend{
 	margin-bottom:10px;
+	width:120px;
+    @include media-breakpoint-down(xs){
+		width:100%;
+    }	
+	
 	.legend-item{
 		margin-bottom: 5px;
 		.pie-legend-box{
@@ -23,4 +28,11 @@
 			font-size:$font-size-sm;
 		}
 	}
+}
+.pie-chart{
+	width:calc(100% - 120px);
+    @include media-breakpoint-down(xs){
+		width:100%;
+    }	
+	
 }

@@ -11,17 +11,17 @@
     function print() {
       __p += __j.call(arguments, '');
     }
-
+    __p += '<div class="d-sm-flex flex-sm-row-reverse">\n';
     if (t.self.hasLegend) {
       ;
-      __p += '\n	<div class="pie-legend d-flex flex-row flex-wrap justify-content-center">\n		';
+      __p += '\n	<div class="pie-legend d-flex d-sm-block flex-row flex-wrap justify-content-center">\n		';
       t.self.colorDomain.forEach(function (d, i) {
         ;
         __p += '\n			<div class="legend-item d-flex flex-row mr-1">\n				<div class="pie-legend-box" style="background-color:' + ((__t = t.self.colorRange[i]) == null ? '' : __t) + ';"></div>\n				<div class="pie-legend-text">' + ((__t = d) == null ? '' : __t) + '</div>\n			</div>\n		';
       });
       __p += '\n	</div>\n';
     };
-    __p += '\n<div id="' + ((__t = t.self.targetDiv + '-chart') == null ? '' : __t) + '"></div>';
+    __p += '\n<div id="' + ((__t = t.self.targetDiv + '-chart') == null ? '' : __t) + '" class="pie-chart"></div>\n</div>';
     return __p;
   };
 })();
@@ -294,6 +294,9 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		if (self.options.donutHoleSize !== 0) {
 			self.svgHeight = self.height / 2;
 		}
+		if (self.wholePie) {
+			self.svgHeight = self.height;
+		}
 
 		if (!self.options.radius) {
 			self.radius = Math.min(self.width, self.height) / 2;
@@ -306,6 +309,9 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		}
 		if (self.options.donutHoleSize === 0) {
 			self.donutHoleSize = self.radius;
+		}
+		if (self.options.donutHoleSize === 0) {
+			self.donutHoleSize = 1;
 		}
 
 		//create an SVG

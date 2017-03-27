@@ -268,6 +268,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 			self.svgHeight = self.height;			
 		}
 		
+		
 		self.heightTranslate = self.height / 2
 		if (self.upsideDown){
 			self.heightTranslate = 0
@@ -276,6 +277,9 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		if (self.options.donutHoleSize !== 0){
 			self.svgHeight = self.height / 2
 		}
+		if (self.wholePie){
+			self.svgHeight = self.height
+		}	
 		
 		if(!self.options.radius){
 			self.radius = Math.min(self.width, self.height) / 2
@@ -288,6 +292,9 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		}
 		if (self.options.donutHoleSize === 0){
 			self.donutHoleSize = self.radius
+		}
+		if (self.options.donutHoleSize === 0) {
+			self.donutHoleSize = 1;
 		}
 
  

@@ -1,4 +1,3 @@
-
 Reuters.Graphics.topdonut = new Reuters.Graphics.donut({
     el: "#reutersGraphic-chart1",
     dataURL:"data/data.csv",
@@ -19,3 +18,4 @@ Reuters.Graphics.topdonut = new Reuters.Graphics.donut({
 	//setupTemplate:Reuters.Graphics.Template.piesetup,
        
 });
+

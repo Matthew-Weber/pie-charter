@@ -1,5 +1,6 @@
+<div class="d-sm-flex flex-sm-row-reverse">
 <%if (t.self.hasLegend){%>
-	<div class="pie-legend d-flex flex-row flex-wrap justify-content-center">
+	<div class="pie-legend d-flex d-sm-block flex-row flex-wrap justify-content-center">
 		<%t.self.colorDomain.forEach(function(d,i){%>
 			<div class="legend-item d-flex flex-row mr-1">
 				<div class="pie-legend-box" style="background-color:<%=t.self.colorRange[i]%>;"></div>
@@ -8,4 +9,5 @@
 		<%})%>
 	</div>
 <%}%>
-<div id="<%=t.self.targetDiv +'-chart'%>"></div>
+<div id="<%=t.self.targetDiv +'-chart'%>" class="pie-chart"></div>
+</div>
