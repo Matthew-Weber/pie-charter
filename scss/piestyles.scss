@@ -36,3 +36,10 @@
     }	
 	
 }
+.arcLabels{
+	font-size:$font-size-xs;
+	text-anchor:middle;
+	&.hidden{
+		display:none;
+	}
+}

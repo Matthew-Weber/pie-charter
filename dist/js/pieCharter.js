@@ -255,9 +255,8 @@ Reuters.Graphics.donut = Backbone.View.extend({
 			self.svg.selectAll(".arcLabels").data(self.multiSort).enter().append("text").attr("class", "arcLabels").attr("y", 20).attr("x", function (d, i) {
 				var divisions = self.multiSort.length;
 				var index = Math.abs(i - divisions + 1);
-				console.log(index);
-				var radiusChunk = self.radius / divisions;
-				return self.donutHoleSize + radiusChunk * index;
+				var radiusChunk = (self.radius - self.donutHoleSize) / divisions;
+				return self.donutHoleSize + radiusChunk * index + radiusChunk / 2;
 			}).text(function (d) {
 				return d;
 			});
@@ -338,9 +337,8 @@ Reuters.Graphics.donut = Backbone.View.extend({
 			self.svg.selectAll("arcLabels").transition().attr("y", 20).attr("x", function (d, i) {
 				var divisions = self.multiSort.length;
 				var index = Math.abs(i - divisions + 1);
-				console.log(index);
-				var radiusChunk = self.radius / divisions;
-				return self.donutHoleSize + radiusChunk * index;
+				var radiusChunk = (self.radius - self.donutHoleSize) / divisions;
+				return self.donutHoleSize + radiusChunk * index + radiusChunk / 2;
 			}).text(function (d) {
 				return d;
 			});
