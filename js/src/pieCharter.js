@@ -229,7 +229,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 				.data(self.multiSort)
 				.enter()
 				.append("text")
-				.attr("class", ".arcLabels")
+				.attr("class", "arcLabels")
 				.attr("y", 20)
 				.attr("x",function(d,i){
 					var divisions = self.multiSort.length;
@@ -334,7 +334,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 			})
 
 		if(self.multiArcs){
-			self.svg.selectAll(".arcLabels")
+			self.svg.selectAll("arcLabels")
 				.transition()
 				.attr("y", 20)
 				.attr("x",function(d,i){
