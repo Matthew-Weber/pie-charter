@@ -229,6 +229,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 				.data(self.multiSort)
 				.enter()
 				.append("text")
+				.attr("class", ".arcLabels")
 				.attr("y", 20)
 				.attr("x",function(d,i){
 					var divisions = self.multiSort.length;
@@ -256,6 +257,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 	
 	update: function(){
 		var self = this;
+		self.trigger("update:start");
 
 		//set the width and the height to be the width and height of the div the chart is rendered in
 		self.width = self.$chartEl.width() - self.margin.left - self.margin.right;
@@ -331,6 +333,22 @@ Reuters.Graphics.donut = Backbone.View.extend({
 				return self.arc[d.data.arcName](d)
 			})
 
+		if(self.multiArcs){
+			self.svg.selectAll(".arcLabels")
+				.transition()
+				.attr("y", 20)
+				.attr("x",function(d,i){
+					var divisions = self.multiSort.length;
+					var index = Math.abs(i - divisions + 1)
+					console.log(index)
+					var radiusChunk = self.radius / divisions
+					return self.donutHoleSize + (radiusChunk * index);
+				})
+				.text(function(d){return d})
+						
+		}
+
+		self.trigger("update:end");
 
  
 
