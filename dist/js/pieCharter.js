@@ -334,7 +334,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 		});
 
 		if (self.multiArcs) {
-			self.svg.selectAll("arcLabels").transition().attr("y", 20).attr("x", function (d, i) {
+			self.svg.selectAll(".arcLabels").transition().attr("y", 20).attr("x", function (d, i) {
 				var divisions = self.multiSort.length;
 				var index = Math.abs(i - divisions + 1);
 				var radiusChunk = (self.radius - self.donutHoleSize) / divisions;

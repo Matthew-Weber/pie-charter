@@ -333,7 +333,7 @@ Reuters.Graphics.donut = Backbone.View.extend({
 			})
 
 		if(self.multiArcs){
-			self.svg.selectAll("arcLabels")
+			self.svg.selectAll(".arcLabels")
 				.transition()
 				.attr("y", 20)
 				.attr("x",function(d,i){
